@@ -1,206 +1,249 @@
-# 🚀 E-Commerce Application Deployment (DevSecOps Project)
 
-Welcome to this repository!  
-Here you will learn the **end-to-end deployment of an E-Commerce Application** using DevOps tools and practices.
 
----
+# 🚀 DevSecOps E-Commerce CI/CD Pipeline
 
-## 📺 Watch the Full Deployment Tutorial
-[![Watch Now](https://img.shields.io/badge/Watch_on-YouTube-red?logo=youtube&logoColor=white)]([https://youtu.be/l-5JQcI_CH0?si=idBUNiwJNfTzwuoV])
+> **An end-to-end, enterprise-grade Java E-Commerce DevSecOps CI/CD pipeline featuring Jenkins, Maven, SonarQube, Nexus, Trivy, Docker, AWS EKS, and Kubernetes.**
 
 ---
 
-## 🤝 Connect With Me
-[![LinkedIn](https://img.shields.io/badge/Connect-Kastro%20Kiran-blue?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kastro-kiran/)
+## 📊 Pipeline Status & Tech Stack
+
+| Category | Tools & Status |
+| :--- | :--- |
+| **CI/CD & Automation** | ![Jenkins](https://img.shields.io/badge/CI%2FCD-Jenkins-red) ![Maven](https://img.shields.io/badge/Maven-3.x-blue) |
+| **Runtime & Language** | ![Java](https://img.shields.io/badge/Java-17-orange) ![Docker](https://img.shields.io/badge/Docker-Containerized-blue) |
+| **Orchestration & Cloud** | ![Kubernetes](https://img.shields.io/badge/Kubernetes-EKS-326CE5) ![AWS](https://img.shields.io/badge/AWS-EKS-orange) |
+| **Security & Quality** | ![Security](https://img.shields.io/badge/Security-Trivy-green) ![Code Quality](https://img.shields.io/badge/Code%20Quality-SonarQube-purple) |
 
 ---
 
-## 💬 Join the DevOps Community
-[![WhatsApp Group](https://img.shields.io/badge/Join-WhatsApp%20Group-green?logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/EGw6ZlwUHZc82cA0vXFnwm)
+## 📌 Executive Summary
+
+This architecture implements a fully automated, secure **DevSecOps CI/CD pipeline** for a Java-based E-Commerce web application.
+
+A developer push to **GitHub** triggers a **Jenkins** pipeline via webhook, executing the following workflow:
+
+
+```
+
+[1] Source Checkout  ➜  [2] Maven Compile  ➜  [3] SonarQube Quality Gate
+│
+[6] Trivy FS Scan    ↖  [5] Nexus Artifact ↖  [4] Maven Package
+│
+▼
+[7] Docker Build     ➜  [8] Trivy Image Scan ➜  [9] Push to Docker Hub
+│
+[12] Live App        ↖  [11] LoadBalancer  ↖  [10] Deploy to AWS EKS
+
+```
+
+### 🎯 Primary Objective
+**Automate the complete lifecycle:** Source Code ➔ Static Analysis ➔ Artifact Storage ➔ Containerization ➔ Vulnerability Scanning ➔ Orchestration ➔ Live Application.
 
 ---
 
-### ⚡ What you’ll find here:
-- Complete CI/CD pipeline for E-Commerce Application  
-- Kubernetes, Docker, Jenkins, and monitoring setup  
-- Hands-on DevOps best practices  
+## 🏗️ Interactive Architecture
+
+```mermaid
+flowchart LR
+    classDef dev fill:#1f2937,stroke:#4b5563,color:#fff;
+    classDef ci fill:#991b1b,stroke:#ef4444,color:#fff;
+    classDef sec fill:#065f46,stroke:#10b981,color:#fff;
+    classDef store fill:#1e40af,stroke:#3b82f6,color:#fff;
+    classDef k8s fill:#1e1b4b,stroke:#6366f1,color:#fff;
+
+    DEV[👨‍💻 Developer]:::dev -->|Git Push| GH[🐙 GitHub]:::dev
+    GH -->|Webhook| J[🔴 Jenkins]:::ci
+    
+    subgraph CI_CD [Pipeline Execution Engine]
+        J --> MAVEN[🔨 Maven]:::ci
+        J --> SONAR[🔍 SonarQube]:::sec
+        J --> NEXUS[📦 Nexus]:::store
+        J --> TRIVY[🛡️ Trivy]:::sec
+        J --> DOCKER[🐳 Docker]:::ci
+    end
 
-Stay tuned, contribute, and let’s grow together in the DevOps journey! 🌍  
+    DOCKER -->|Push Image| HUB[🐳 Docker Hub]:::store
+    HUB -->|Pull Image| EKS[☸️ AWS EKS Cluster]:::k8s
+    J -->|kubectl deploy| EKS
+    
+    subgraph Cluster [EKS Namespace: webapps]
+        EKS --> POD1[ Pod 1 ]:::k8s
+        EKS --> POD2[ Pod 2 ]:::k8s
+        POD1 & POD2 --> SVC[🌐 AWS LoadBalancer]:::k8s
+    end
 
+    SVC --> USER[👥 End User]:::dev
 
-### You can also use MySQL as Database
+```
 
-- Create or Select a Database
-- Use that Database
-- Insert this queries:
+---
 
-- CREATE TABLE brand (
-  bid int DEFAULT NULL,
-  bname varchar(50) DEFAULT NULL
-); 
+## 🧰 Technology Stack Reference
 
+| Technology | Role & Function in Pipeline |
+| --- | --- |
+| **GitHub** | Source Code Management (SCM) & Webhook triggers |
+| **Jenkins** | Automation server orchestrating the CI/CD pipeline |
+| **Maven & Java 17** | Application compilation, dependency management, and build packaging |
+| **SonarQube** | Static Application Security Testing (SAST) & Quality Gate verification |
+| **Nexus Repository** | Binary artifact repository for Maven WAR files |
+| **Trivy** | Vulnerability scanning for project filesystem & Docker container images |
+| **Docker & Docker Hub** | Multi-stage image build & container registry management |
+| **AWS EKS & kubectl** | Managed Kubernetes cluster hosting containerized workloads |
+| **AWS Load Balancer** | Ingress and traffic management for public application access |
 
+---
 
-- INSERT INTO brand VALUES (1,'samsung'),(2,'sony'),(3,'lenovo'),(4,'acer'),(5,'onida');
+## 📁 Repository Anatomy
 
+```text
+ECommerce-App/
+├── 📄 Jenkinsfile              # Pipeline-as-Code execution definition
+├── 📄 Dockerfile               # Multi-stage build definition (Maven + Tomcat)
+├── 📄 deployment-service.yaml  # K8s Deployment & LoadBalancer Service spec
+├── 📄 pom.xml                  # Maven dependencies & build configurations
+├── 📂 src/                     # Java application source code
+└── 📂 target/                  # Compiled WAR build artifacts
 
+```
 
-- CREATE TABLE cart (
-  Name varchar(100) DEFAULT NULL,
-  bname varchar(50) DEFAULT NULL,
-  cname varchar(50) DEFAULT NULL,
-  pname varchar(50) DEFAULT NULL,
-  pprice int DEFAULT NULL,
-  pquantity int DEFAULT NULL,
-  pimage varchar(200) DEFAULT NULL
-);
+---
 
+## ⚙️ CI/CD Stage Breakdown
 
+```groovy
+stage('Git Checkout') {
+    steps {
+        git branch: 'master', url: '[https://github.com/ab-inand/Ecommerce-App-.git](https://github.com/ab-inand/Ecommerce-App-.git)'
+    }
+}
 
-- CREATE TABLE category (
-  cid int DEFAULT NULL,
-  cname varchar(50) DEFAULT NULL
-);
+```
 
+* **Purpose:** Pulls fresh code directly from the GitHub repository to ensure state alignment.
+* **Verification:** Executes `pwd && ls -la` to validate workspace context and critical files (`pom.xml`, `Dockerfile`).
 
+```bash
+mvn clean compile
 
-- INSERT INTO category VALUES (1,'laptop'),(2,'tv'),(3,'mobile'),(4,'watch');
+```
 
+* **Analysis Parameters:** Checks for security vulnerabilities, bugs, technical debt, code smells, and duplication.
+* **Quality Gate Assertion:** Pipeline execution pauses until SonarQube validates quality standard thresholds:
+```groovy
+waitForQualityGate abortPipeline: true
 
+```
 
 
-- CREATE TABLE contactus (
-  id int NOT NULL AUTO_INCREMENT,
-  Name varchar(100) DEFAULT NULL,
-  Email_Id varchar(100) DEFAULT NULL,
-  Contact_No int DEFAULT NULL,
-  Message varchar(8000) DEFAULT NULL,
-  PRIMARY KEY (id)
-);
 
+```bash
+# Packaging & Binary Upload
+mvn package -DskipTests # Creates target/EcommerceApp.war
+mvn deploy -DskipTests  # Uploads WAR to Nexus Repository
 
+# File System Security Scan
+trivy fs --severity HIGH,CRITICAL .
 
+```
 
-- CREATE TABLE customer (
-  Name varchar(100) DEFAULT NULL,
-  Password varchar(20) DEFAULT NULL,
-  Email_Id varchar(100) DEFAULT NULL,
-  Contact_No int DEFAULT NULL
-);
+```dockerfile
+# Multi-stage Dockerfile Design
+# Stage 1: Build Application
+FROM maven:3.8-openjdk-17 AS builder
+COPY . /app
+RUN mvn clean package -f /app/pom.xml
 
+# Stage 2: Runtime Production Container
+FROM tomcat:9.0-jdk17
+COPY --from=builder /app/target/*.war /usr/local/tomcat/webapps/ROOT.war
+EXPOSE 8080
 
+```
 
+* **Container Scan & Push:**
+```bash
+docker build -t abhi888a/ecommerce-app:latest .
+trivy image --severity HIGH,CRITICAL abhi888a/ecommerce-app:latest
+docker push abhi888a/ecommerce-app:latest
 
-- CREATE TABLE login (
-  username varchar(100) DEFAULT NULL,
-  password varchar(100) DEFAULT NULL
-);
+```
 
 
 
-- INSERT INTO login VALUES ('admin','admin');
+```bash
+# Rolling Update Deployment on AWS EKS
+kubectl rollout restart deployment/ecommerce-deployment -n webapps
+kubectl rollout status deployment/ecommerce-deployment -n webapps --timeout=180s
 
-- CREATE TABLE order_details (
-  Date varchar(100) DEFAULT NULL,
-  Name varchar(100) DEFAULT NULL,
-  bname varchar(50) DEFAULT NULL,
-  cname varchar(50) DEFAULT NULL,
-  pname varchar(50) DEFAULT NULL,
-  pprice int DEFAULT NULL,
-  pquantity int DEFAULT NULL,
-  pimage varchar(200) DEFAULT NULL
-);
+```
 
+#### Verification Metrics:
 
+```bash
+kubectl get pods,svc,deployment -n webapps
 
-- CREATE TABLE orders (
-  Order_Id int NOT NULL AUTO_INCREMENT,
-  Customer_Name varchar(100) DEFAULT NULL,
-  Customer_City varchar(45) DEFAULT NULL,
-  Date varchar(100) DEFAULT NULL,
-  Total_Price int DEFAULT NULL,
-  Status varchar(45) DEFAULT NULL,
-  PRIMARY KEY (Order_Id)
-);
+```
 
+> **Expected Target State:**
+> * Pods: `Running` (2 Replicas)
+> * Deployment: `Available`
+> * Service: `LoadBalancer` assigned with external AWS DNS
+> 
+> 
 
+---
 
+## 🔒 Security Lifecycle Integration
 
-- CREATE TABLE product (
-  pid int NOT NULL AUTO_INCREMENT,
-  pname varchar(50) DEFAULT NULL,
-  pprice int DEFAULT NULL,
-  pquantity int DEFAULT NULL,
-  pimage varchar(200) DEFAULT NULL,
-  bid int DEFAULT NULL,
-  cid int DEFAULT NULL,
-  PRIMARY KEY (pid)
-);
+```text
+       ┌────────────────┐      ┌────────────────┐      ┌────────────────┐
+       │ Static Source  │      │ Dependency/FS  │      │ Container Scan │
+       │  (SonarQube)   │ ───► │  (Trivy FS)    │ ───► │  (Trivy Img)   │
+       └────────────────┘      └────────────────┘      └────────────────┘
+               │                       │                       │
+               ▼                       ▼                       ▼
+         Quality Gate            Vulnerability           Image Registry
+        Enforcement             Report Artifact          Access Control
 
+```
 
+---
 
-- INSERT INTO product VALUES (5,'sonysmart',50000,1,'sonywatch.webp',2,4),(6,'GalaxyBook',45000,1,'samsunglaptop.jpg',1,1),(7,'smarttv',28000,1,'onidatv.jpg',5,2),(8,'smartphone',15000,1,'lenovomobile.webp',3,3),(9,'aspire',52000,1,'acerlaptop.jpg',4,1),(10,'Braviass',52,1,'sonytv.jpg',2,2),(11,'GalaxyWatch',22000,1,'galaxywatch.webp',1,4),(14,'kdl',45000,1,'sony kdl.jpg',2,2),(15,'series a7',21000,1,'acer series a7.jpg',4,2),(17,'leo',31000,1,'onida leo.jpg',5,2),(18,'crystal',42000,1,'samsung crystal.webp',1,2),(19,'Aspire 7',55000,1,'acer aspire7.jpg',4,1),(20,'ideapad',37000,1,'lenovo ideapad.jpg',3,1),(21,'legion',51000,1,'lenovo legion.jpg',3,1),(22,'Galaxy Z Fold3',66000,1,'Galaxy z fold3.jpg',1,3),(23,'Galaxy S22',55000,1,'Samsung galaxy s22.webp',1,3),(24,'Xperia 1v',56000,1,'sony xperia 1v.jpg',2,3),(26,'A850',14500,1,'lenovo a850.jpg',3,3),(27,'Galaxy watch1',8000,1,'galaxy watch.jpg',1,4),(28,'Galaxy Watch2',95000,1,'galaxy watch4.jpg',1,4),(29,'Smart Fit',11000,1,'smart fit.jpg',3,4),(30,'Sony Smart2',12000,1,'sony smart2.webp',2,4),(31,'Gaming Predator',120000,1,'Acer Predator.jpg',4,1),(32,'Liquid',16000,1,'Acer liquid.jpg',4,3),(33,'Neo QLED',46000,1,'Samsung neo Qled.webp',1,2),(34,'VAIO',53000,1,'Sony Vaio.jpg',2,1),(35,'Xperia Z',32000,1,'sonyxperiaz.png',2,3);
+## 📋 Screenshot & Audit Proof Checklist
 
+Ensure all mandatory artifacts are captured and organized within the repository structure before environment teardown:
 
+* [ ] **`01-jenkins-pipeline-success.png`**: Full pipeline stage view showing all steps green.
+* [ ] **`02-jenkins-console-success.png`**: Logs displaying `BUILD SUCCESS`.
+* [ ] **`03-sonarqube-quality-gate.png`**: Metric breakdown (Bugs, Vulnerabilities, Code Smells).
+* [ ] **`04-nexus-artifact.png`**: Published WAR file present inside Nexus Repository.
+* [ ] **`05-trivy-reports.png`**: Validated `trivy-fs-report.txt` and `trivy-image-report.txt`.
+* [ ] **`06-dockerhub-image.png`**: Updated `abhi888a/ecommerce-app:latest` tag in Docker Hub.
+* [ ] **`07-kubernetes-cluster.png`**: `kubectl get pods,svc,nodes -n webapps` output.
+* [ ] **`08-live-application.png`**: Working application accessed via AWS LoadBalancer URL.
 
+---
 
+## ⚠️ Production Readiness Enhancements
 
-- CREATE VIEW `viewlist` AS select `brand`.`bname` AS `bname`,`category`.`cname` AS `cname`,`product`.`pname` AS `pname`,`product`.`pprice` AS `pprice`,`product`.`pquantity` AS `pquantity`,`product`.`pimage` AS `pimage` from ((`brand` join `product` on((`brand`.`bid` = `product`.`bid`))) join `category` on((`product`.`cid` = `category`.`cid`))) ;
+> [!WARNING]
+> While optimized for learning and demonstration, apply the following controls prior to production rollout:
 
+1. **Tagging Policy:** Replace `latest` image tags with dynamic Git SHA tags (`${BUILD_NUMBER}-${GIT_COMMIT}`) for traceable rollbacks.
+2. **Secret Management:** Externalize credentials using **AWS Secrets Manager** or **HashiCorp Vault**.
+3. **Cluster Governance:** Implement Kubernetes **RBAC least-privilege policies**, NetworkPolicies, and Resource Quotas (`limits`/`requests`).
+4. **State Persistence:** Migrate application data from embedded SQLite to a managed cluster instance such as **AWS RDS PostgreSQL**.
 
+---
 
+## 👨‍💻 Maintainer
 
-- CREATE VIEW `mobile` AS select `brand`.`bname` AS `bname`,`category`.`cname` AS `cname`,`product`.`pname` AS `pname`,`product`.`pprice` AS `pprice`,`product`.`pquantity` AS `pquantity`,`product`.`pimage` AS `pimage` from ((`brand` join `product` on((`brand`.`bid` = `product`.`bid`))) join `category` on((`product`.`cid` = `category`.`cid`))) where (`category`.`cid` = 3) ;
+**Abhinand**
 
+*B.Tech Computer Science & Engineering* | Cloud & DevOps Specialist
 
+```
 
-
-- CREATE VIEW `laptop` AS select `brand`.`bname` AS `bname`,`category`.`cname` AS `cname`,`product`.`pname` AS `pname`,`product`.`pprice` AS `pprice`,`product`.`pquantity` AS `pquantity`,`product`.`pimage` AS `pimage` from ((`brand` join `product` on((`brand`.`bid` = `product`.`bid`))) join `category` on((`product`.`cid` = `category`.`cid`))) where (`category`.`cid` = 1) ;
-
-
-
-
-- CREATE VIEW `tv` AS select `brand`.`bname` AS `bname`,`category`.`cname` AS `cname`,`product`.`pname` AS `pname`,`product`.`pprice` AS `pprice`,`product`.`pquantity` AS `pquantity`,`product`.`pimage` AS `pimage` from ((`brand` join `product` on((`brand`.`bid` = `product`.`bid`))) join `category` on((`product`.`cid` = `category`.`cid`))) where (`category`.`cid` = 2) ;
-
-
-
-
-- CREATE VIEW `watch` AS select `brand`.`bname` AS `bname`,`category`.`cname` AS `cname`,`product`.`pname` AS `pname`,`product`.`pprice` AS `pprice`,`product`.`pquantity` AS `pquantity`,`product`.`pimage` AS `pimage` from ((`brand` join `product` on((`brand`.`bid` = `product`.`bid`))) join `category` on((`product`.`cid` = `category`.`cid`))) where (`category`.`cid` = 4) ;
-
-
-
-- CREATE TABLE usermaster (
-  Name varchar(100) DEFAULT NULL,
-  Password varchar(20) DEFAULT NULL
-);
-
-
-- INSERT INTO usermaster VALUES ('admin','admin');
-
-### Now do some changes in Project
-- In Eclipse
-- Open Project > open com.conn package > open DBConnect.java file.
-   Now make some changes in this file,
-   change "conn" value,
-  like if it is
-   
-   conn = DriverManager.getConnection("jdbc:sqlite:C:/Users/Swapnil/eclipse- 
-   workspace/Online Electronic Shopping/mydatabase.db");
-   
-   change it to
-
-  conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/DatabaseName","root","root");
-
-
-  Note: Put Address according to your Database Name and Password.
-
-  - Save the file
-
-  - Now try running Project and Check if the changes are done or not.
-
-   
-
-
-### Deployed by: Kastro Kiran V
-
-
+```
