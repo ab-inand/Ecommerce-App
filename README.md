@@ -212,18 +212,92 @@ kubectl get pods,svc,deployment -n webapps
 
 ---
 
-## 📋 Screenshot & Audit Proof Checklist
+## 📋 Screenshot & Audit Proof 
 
-Ensure all mandatory artifacts are captured and organized within the repository structure before environment teardown:
+---
 
-* [ ] **`01-jenkins-pipeline-success.png`**: Full pipeline stage view showing all steps green.
-* [ ] **`02-jenkins-console-success.png`**: Logs displaying `BUILD SUCCESS`.
-* [ ] **`03-sonarqube-quality-gate.png`**: Metric breakdown (Bugs, Vulnerabilities, Code Smells).
-* [ ] **`04-nexus-artifact.png`**: Published WAR file present inside Nexus Repository.
-* [ ] **`05-trivy-reports.png`**: Validated `trivy-fs-report.txt` and `trivy-image-report.txt`.
-* [ ] **`06-dockerhub-image.png`**: Updated `abhi888a/ecommerce-app:latest` tag in Docker Hub.
-* [ ] **`07-kubernetes-cluster.png`**: `kubectl get pods,svc,nodes -n webapps` output.
-* [ ] **`08-live-application.png`**: Working application accessed via AWS LoadBalancer URL.
+## 📸 Screenshots & Audit Proof
+
+Here is the visual verification and audit trail showing each stage of the DevSecOps CI/CD pipeline, AWS infrastructure setup, code quality checks, artifact management, and live Kubernetes deployment.
+
+---
+
+### 1. AWS Infrastructure (EC2 Instances)
+> Active EC2 nodes hosting Jenkins, SonarQube, Nexus, and the AWS EKS worker nodes.
+
+![AWS EC2 Instances](./images/01-aws-ec2-instances.png)
+
+---
+
+### 2. AWS EKS Cluster Status
+> Active status and control plane details for the `kastro-eks` Kubernetes cluster provisioned in region `ap-south-1`.
+
+![AWS EKS Cluster](./images/02-aws-eks-cluster.png)
+
+---
+
+### 3. Jenkins CI/CD Pipeline Stages View
+> Visual breakdown of all automated pipeline stages passing successfully from Git Checkout to EKS Deployment.
+
+![Jenkins Pipeline Stages](./images/03-jenkins-pipeline-stages.png)
+
+---
+
+### 4. Jenkins Pipeline Console Output
+> Terminal build execution logs showing the final status: `Finished: SUCCESS`.
+
+![Jenkins Console Output](./images/04-jenkins-console-success.png)
+
+---
+
+### 5. SonarQube Quality Gate Analysis
+> Code quality and security report displaying bugs, vulnerabilities, code smells, and the `Passed` status for `ECommerce-App`.
+
+![SonarQube Quality Gate](./images/05-sonarqube-quality-gate.png)
+
+---
+
+### 6. Nexus Artifact Repository
+> Hosted Maven repository displaying stored `.war` artifacts inside `maven-public`.
+
+![Nexus Repository](./images/06-nexus-artifact-repository.png)
+
+---
+
+### 7. Jenkins Build Summary & Security Artifacts
+> Archived security scanning reports (`trivy-fs-report.txt` & `trivy-image-report.txt`) alongside the SonarQube quality badge.
+
+![Jenkins Build Artifacts](./images/07-jenkins-build-artifacts.png)
+
+---
+
+### 8. Docker Hub Image Registry
+> Verification of the containerized image `abhi888a/ecommerce-app` pushed successfully with updated tags.
+
+![Docker Hub Image Tags](./images/08-dockerhub-image-tags.png)
+
+---
+
+### 9. AWS Classic Load Balancer
+> Provisioned Load Balancer console view managing external traffic to the EKS cluster nodes.
+
+![AWS Load Balancer](./images/09-aws-load-balancer.png)
+
+---
+
+### 10. Kubernetes Cluster Verification via CLI
+> Terminal CLI output confirming active pods, services, and deployments running in the `webapps` namespace (`kubectl get all`).
+
+![Kubernetes CLI Verification](./images/10-k8s-kubectl-verification.png)
+
+---
+
+### 11. Live Application Verification
+> Live browser output verifying the running E-Commerce web application accessible via the Load Balancer endpoint.
+
+![Live Application Page](./images/11-livepage)
+
+---
 
 ---
 
@@ -238,12 +312,6 @@ Ensure all mandatory artifacts are captured and organized within the repository 
 4. **State Persistence:** Migrate application data from embedded SQLite to a managed cluster instance such as **AWS RDS PostgreSQL**.
 
 ---
-
-## 👨‍💻 Maintainer
-
-**Abhinand**
-
-*B.Tech Computer Science & Engineering* | Cloud & DevOps Specialist
 
 ```
 
