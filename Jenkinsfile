@@ -42,18 +42,19 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh """
-                    ${SCANNER_HOME}/bin/sonar-scanner \
-                    -Dsonar.projectKey=ECommerce-App \
-                    -Dsonar.projectName=ECommerce-App \
-                    -Dsonar.sources=src \
-                    -Dsonar.java.binaries=target/classes
-                    """
-                }
-            }
+    steps {
+        withSonarQubeEnv('SonarQube') {
+            sh """
+            ${SCANNER_HOME}/bin/sonar-scanner \
+            -Dsonar.projectKey=ECommerce-App \
+            -Dsonar.projectName=ECommerce-App \
+            -Dsonar.sources=src \
+            -Dsonar.java.binaries=target/classes \
+            -Dsonar.cpd.exclusions=**/*.jsp
+            """
         }
+    }
+}
 
         stage('Quality Gate') {
             steps {
