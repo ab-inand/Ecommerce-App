@@ -217,10 +217,7 @@ kubectl get pods,svc,deployment -n webapps
 Ensure all mandatory artifacts are captured and organized within the repository structure before environment teardown:
 
 * [ ] **`01-jenkins-pipeline-success.png`**: Full pipeline stage view showing all steps green.
-<img width="1440" height="900" alt="Screenshot 2026-08-10 at 3 02 32 PM" src="https://github.com/user-attachments/assets/afa8cc48-4d4c-4957-b381-b3b1602167ae" />
 * [ ] **`02-jenkins-console-success.png`**: Logs displaying `BUILD SUCCESS`.
-<img width="1440" height="900" alt="Screenshot 2026-08-10 at 3 06 05 PM" src="https://github.com/user-attachments/assets/c1aaec8b-aabf-4424-81a9-82982ac505ec" />
-
 * [ ] **`03-sonarqube-quality-gate.png`**: Metric breakdown (Bugs, Vulnerabilities, Code Smells).
 * [ ] **`04-nexus-artifact.png`**: Published WAR file present inside Nexus Repository.
 * [ ] **`05-trivy-reports.png`**: Validated `trivy-fs-report.txt` and `trivy-image-report.txt`.
