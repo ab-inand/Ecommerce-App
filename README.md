@@ -212,10 +212,6 @@ kubectl get pods,svc,deployment -n webapps
 
 ---
 
-## 📋 Screenshot & Audit Proof 
-
----
-
 ## 📸 Screenshots & Audit Proof
 
 Here is the visual verification and audit trail showing each stage of the DevSecOps CI/CD pipeline, AWS infrastructure setup, code quality checks, artifact management, and live Kubernetes deployment.
